@@ -1,6 +1,6 @@
-from constants import POSTMAN
+from constants import APP, POSTMAN
 import uuid
-from jinja2 import Template
+from jinja2 import Template, FileSystemLoader, Environment
 from typing import List
 
 class Header:
@@ -22,7 +22,7 @@ class Request:
 
 
 class Collection:
-    def __init__(self, name, id = None ) -> None:
+    def __init__(self, name, id = None) -> None:
         self.id = uuid.uuid4() if id == None else id
         self.name = name
         self.schema = POSTMAN.schema
@@ -31,18 +31,26 @@ class Collection:
     def add_request(self, request: Request):
         self.request.append(request)
     
-    def read_templatefile(self, path):
-        pass
     
-    def get_template_object(self, template):
-        pass
+    def get_template_object(self) -> Template:
+        print(APP.root_dir + APP.template_dir)
+        file_loader = FileSystemLoader(APP.root_dir + APP.template_dir)
+        print(file_loader.list_templates())
+        env = Environment(loader=file_loader)
+
+        template = env.get_template(APP.collections_template)
+        return template
     
-    def render_json(self, template: Template):
-        json = template.render(collection = self, requests= self.request)
+    def render(self, template: Template) -> str:
+        rendered_template = template.render(collection = self, requests= self.request)
+        return rendered_template
+        
         
 
-
-        
     
 if __name__ == "__main__":
-    print("Main execution")
+   collection = Collection("sample_collection")
+   template = collection.get_template_object()
+   render = collection.render(template)
+   print(render)
+   
