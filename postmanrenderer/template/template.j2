@@ -1,0 +1,28 @@
+{
+    "info": {
+        "_postman_id": "{{collection.id}}",
+        "name": "{{collection.name}}",
+        "schema": "{{collection.schema}}"
+    },
+    "item": [
+        {% for request in collection.requests %}
+        {
+            "name": "{{request.name}}",
+            "request": {
+                "method": "{{request.method}}",
+                "header": [],
+                "url": {
+                    "raw": "{{request.url}}",
+                    "host": [
+                        "www",
+                        "google",
+                        "com"
+                    ]
+                },
+                "description": "{{request.description}}"
+            },
+            "response": []
+        },
+        {%- endfor %}
+    ]
+}
