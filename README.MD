@@ -1,6 +1,8 @@
 ## Broad Area of Work
 Postman is an application used for API testing. It is an HTTP client that tests HTTP requests, utilizing a graphical user interface, through which we obtain different types of responses that need to be subsequently validated. The current research project focus is on developing a template engine that can produce postman collections in JSON format.
 
+![image6](https://user-images.githubusercontent.com/26188281/149787703-7d3b0b03-971b-4706-b386-641ba94c5f90.png)
+
 ## Background
 
 Testing is one of the most critical processes of the Software Development Lifecycle (SDLC). It helps companies to perform a comprehensive assessment of software and ensure that their product fulfills the client’s needs.
