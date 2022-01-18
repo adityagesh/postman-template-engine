@@ -1,12 +1,18 @@
-VENV = venv
-PYTHON = $(VENV)/bin/python3
-PIP = $(VENV)/bin/pip
+VENV := venv
+PYTHON := $(VENV)/bin/python3
+PIP := $(VENV)/bin/pip
+PYTEST := pytest
 
-activate: $(VENV)/bin/activate
+activate:  
+	$(VENV)/bin/activate
 
 build: 
 	$(MAKE) activate
 	python setup.py bdist_wheel
+
+test: 
+	activate
+	$(PYTHON) -m $(PYTEST)
 
 $(VENV)/bin/activate: requirements.txt
 	python3 -m venv $(VENV)
@@ -16,4 +22,4 @@ clean:
 	rm -rf __pycache__
 	rm -rf $(VENV)
 
-.PHONY: activate clean
+.PHONY: activate clean build
