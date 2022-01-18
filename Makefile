@@ -20,6 +20,7 @@ build:
 
 test: 
 	$(MAKE) activate
+	$(shell export PYTHONPATH=./postmanrenderer)
 	$(PYTHON) -m $(PYTEST) --cov-report term --cov=postmanrenderer
 	
 coverage:

@@ -3,3 +3,4 @@ venv/
 dist/
 postmanrenderer.egg-info/
 __pycache__
+.coverage

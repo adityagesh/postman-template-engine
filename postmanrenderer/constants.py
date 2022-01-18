@@ -10,6 +10,14 @@ class HTTP_METHOD:
     GET = "GET"
     POST = "POST"
     PUT = "PUT"
+    # PATCH = "PATCH"
+    # DELETE = "DELETE"
+    # COPY = "COPY"
+    # HEAD = "HEAD"
+    # OPTIONS = "OPTIONS"
+    # LINK = "LINK"
+    # UNLINK = "UNLINK"
+    
     
 class Jinja:
     trim_blocks = False
