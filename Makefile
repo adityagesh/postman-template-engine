@@ -3,6 +3,13 @@ PYTHON := $(VENV)/bin/python3
 PIP := $(VENV)/bin/pip
 PYTEST := pytest
 
+setup:
+	$(MAKE) setup-hooks
+	$(VENV)/bin/activate
+
+setup-hooks:
+	cp hooks/commit-msg .git/hooks/
+
 activate:  
 	$(VENV)/bin/activate
 
@@ -11,7 +18,7 @@ build:
 	python setup.py bdist_wheel
 
 test: 
-	activate
+	$(MAKE) activate
 	$(PYTHON) -m $(PYTEST)
 
 $(VENV)/bin/activate: requirements.txt
