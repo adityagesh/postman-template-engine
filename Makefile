@@ -9,6 +9,7 @@ setup:
 
 setup-hooks:
 	cp hooks/commit-msg .git/hooks/
+	chmod +x .git/hooks/commit-msg
 
 activate:  
 	$(VENV)/bin/activate

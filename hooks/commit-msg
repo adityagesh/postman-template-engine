@@ -4,7 +4,7 @@ START_LINE=`head -n1 $INPUT_FILE`
 ALLOWED_PREFIX="fix: | feat: | Merge "
 PATTERN="^($ALLOWED_PREFIX)\w+"
 if ! [[ "$START_LINE" =~ $PATTERN ]]; then
-  echo "Bad commit message, should follow pattern $ALLOWED_PREFIX"
+  echo -e "\e[1;31mABORTING COMMIT, bad commit message, should follow pattern: $ALLOWED_PREFIX \e[1;m"
   exit 1
 fi
 
