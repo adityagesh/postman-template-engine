@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 INPUT_FILE=$1
 START_LINE=`head -n1 $INPUT_FILE`
-ALLOWED_PREFIX="fix: | feat: | Merge "
+ALLOWED_PREFIX="fix: |feat: |Merge "
 PATTERN="^($ALLOWED_PREFIX)\w+"
 if ! [[ "$START_LINE" =~ $PATTERN ]]; then
   echo -e "\e[1;31mABORTING COMMIT, bad commit message, should follow pattern: $ALLOWED_PREFIX \e[1;m"

@@ -12,17 +12,16 @@
                 "method": "{{request.method}}",
                 "header": [],
                 "url": {
-                    "raw": "{{request.url}}",
-                    "host": [
-                        "www",
-                        "google",
-                        "com"
-                    ]
+                    "raw": "{{request.url.raw}}",
+                    {%- if request.url.protocol %} 
+                    "protocol": "{{request.url.protocol}}",
+                    {%- endif %}
+                    "host": {{request.url.host | to_json}}
                 },
                 "description": "{{request.description}}"
             },
             "response": []
-        },
+        } {{ ", " if not loop.last else "" }}
         {%- endfor %}
         ]
 }

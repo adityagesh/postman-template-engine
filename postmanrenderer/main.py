@@ -1,19 +1,23 @@
-from constants import APP, POSTMAN
+from constants import APP, HTTP_METHOD, POSTMAN
 import uuid
 from jinja2 import Template, FileSystemLoader, Environment
 from typing import List
+import jinja_env 
 
 class Header:
-    pass
+    def __init__(self):
+        pass
 
 
 class Url: 
     def __init__(self, url: str):
-        self.raw = url
-        self.host = url.split(".")
+        url_split = url.split("://")
+        self.protocol = url_split[0] if len(url_split) > 1 else None
+        self.raw = url_split[-1]
+        self.host = self.raw.split(".")
 
 class Request:
-    def __init__(self, name, method, description, headers: List[Header], url: Url) -> None:
+    def __init__(self, name: str, method: HTTP_METHOD, description: str, headers: List[Header], url: Url) -> None:
         self.name = name
         self.method = method
         self.description = description
@@ -26,30 +30,32 @@ class Collection:
         self.id = uuid.uuid4() if id == None else id
         self.name = name
         self.schema = POSTMAN.schema
-        self.request = []
+        self.requests = []
         
     def add_request(self, request: Request):
-        self.request.append(request)
+        self.requests.append(request)
     
     
     def get_template_object(self) -> Template:
-        print(APP.root_dir + APP.template_dir)
         file_loader = FileSystemLoader(APP.root_dir + APP.template_dir)
-        print(file_loader.list_templates())
         env = Environment(loader=file_loader)
-
+        jinja_env.init(env)
         template = env.get_template(APP.collections_template)
         return template
     
     def render(self, template: Template) -> str:
-        rendered_template = template.render(collection = self, requests= self.request)
+        rendered_template = template.render(collection= self)
         return rendered_template
         
-        
-
     
 if __name__ == "__main__":
    collection = Collection("sample_collection")
+   request = Request("Yahoo request", HTTP_METHOD.GET,"", [], Url("https://www.yahoo.com"))
+   collection.add_request(request)
+   
+   request = Request("Google request", HTTP_METHOD.GET,"", [], Url("https://www.google.com"))
+   collection.add_request(request)
+   
    template = collection.get_template_object()
    render = collection.render(template)
    print(render)
