@@ -20,7 +20,10 @@ build:
 
 test: 
 	$(MAKE) activate
-	$(PYTHON) -m $(PYTEST)
+	$(PYTHON) -m $(PYTEST) --cov-report term --cov=postmanrenderer
+	
+coverage:
+	$(PYTHON) -m pytest --cov-report term --cov=postmanrenderer
 
 $(VENV)/bin/activate: requirements.txt
 	python3 -m venv $(VENV)
@@ -30,4 +33,4 @@ clean:
 	rm -rf __pycache__
 	rm -rf $(VENV)
 
-.PHONY: activate clean build
+.PHONY: activate clean build test setup setup-hooks coverage
