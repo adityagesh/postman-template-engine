@@ -3,14 +3,17 @@ name: Makefile CI
 on:
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
 
 jobs:
   test:
-    name: Run Tests
+    name: Tests
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@main
+    - uses: actions/checkout@v2
 
     - name: Set up Python 3.8
       uses: actions/setup-python@v2
@@ -24,7 +27,9 @@ jobs:
       run: make tests
 
 
-  publish:    
+  publish: 
+    if: ${{ github.event_name == 'push' }}
+    needs: test
     name: Build dist and publish
     runs-on: ubuntu-latest
 
