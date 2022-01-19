@@ -8,8 +8,10 @@ setup:
 	$(VENV)/bin/activate
 
 setup-hooks:
-	cp hooks/commit-msg .git/hooks/
-	chmod +x .git/hooks/commit-msg
+	if [ -d ".git" ]; then \
+		cp hooks/commit-msg .git/hooks/; \
+		chmod +x .git/hooks/commit-msg; \
+	fi
 
 activate:  
 	$(VENV)/bin/activate
