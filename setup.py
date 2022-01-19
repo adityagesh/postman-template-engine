@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 from codecs import open
-from os import path
+from os import path, getenv
 
 
 pwd = path.abspath(path.dirname(__file__))
@@ -11,7 +11,7 @@ with open(path.join(pwd, 'README.MD'), encoding='utf-8') as f:
 setup(
     name='postmanrenderer',
     packages=find_packages(include=['postmanrenderer']),
-    version='0.1.0',
+    version=getenv("VERSION", "0.1.0"),
     description='Create and Export Postman collections',
     long_description=long_description,
     long_description_content_type="text/markdown",

@@ -5,7 +5,7 @@ PYTEST := pytest
 
 setup:
 	$(MAKE) setup-hooks
-	$(VENV)/bin/activate
+	$(MAKE) $(VENV)/bin/activate
 
 setup-hooks:
 	if [ -d ".git" ]; then \
@@ -13,8 +13,8 @@ setup-hooks:
 		chmod +x .git/hooks/commit-msg; \
 	fi
 
-activate:  
-	$(VENV)/bin/activate
+activate: $(VENV)/bin/activate
+	. $(VENV)/bin/activate
 
 dist: 
 	$(MAKE) activate
@@ -33,7 +33,7 @@ twine-check: dist
 
 twine-test-upload: dist
 	$(MAKE) twine-check
-	twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+	twine upload  --verbose --repository-url https://test.pypi.org/legacy/ dist/* 
 
 twine-upload: dist
 	$(MAKE) twine-check
@@ -47,6 +47,6 @@ $(VENV)/bin/activate: requirements.txt
 	$(PIP) install -r requirements.txt
 
 clean:
-	rm -r __pycache__  $(VENV) dist/
+	rm -rf __pycache__  $(VENV) dist/
 
 .PHONY: activate clean test setup setup-hooks coverage twine-check twine-test-upload twine-upload publish
