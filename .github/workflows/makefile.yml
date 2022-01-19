@@ -1,10 +1,6 @@
 name: Makefile CI
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+on: [push, pull_request]
 
 
 jobs:
@@ -26,9 +22,18 @@ jobs:
     - name: test
       run: make test
 
-
+  semver:
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    needs: test
+    steps:
+    - name: Semver
+      uses: K-Phoen/semver-release-action@master
+      with:
+        release_branch: main
+        release_strategy: none
+  
   publish: 
-    if: ${{ github.event_name == 'push' }}
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     needs: test
     name: Build dist and publish
     runs-on: ubuntu-latest
@@ -60,5 +65,7 @@ jobs:
         export TWINE_PASSWORD=${{ secrets.PYPI_TEST_TOKEN }}
         export TWINE_USERNAME=__token__
         make publish
-    
+  
+
 # TODO: TAG RELEASE with v
+# TODO: Run Test for all branches, release for main
