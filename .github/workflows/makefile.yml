@@ -21,7 +21,7 @@ jobs:
     - name: venv
       run: make setup
       
-    - name: tests
+    - name: test
       run: make tests
       
     - name: dist

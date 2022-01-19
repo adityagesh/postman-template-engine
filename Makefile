@@ -16,9 +16,8 @@ setup-hooks:
 activate: $(VENV)/bin/activate
 	. $(VENV)/bin/activate
 
-dist: 
-	$(MAKE) activate
-	python setup.py sdist bdist_wheel
+dist: $(VENV)/bin/activate
+	$(PYTHON) setup.py sdist bdist_wheel
 
 test: 
 	$(MAKE) activate
