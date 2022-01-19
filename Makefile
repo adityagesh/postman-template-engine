@@ -3,7 +3,7 @@ PYTHON := $(VENV)/bin/python3
 PYTHON-M := $(PYTHON) -m
 PIP := $(VENV)/bin/pip
 PYTEST := pytest
-
+EXPORT_PYPATH = export PYTHONPATH=./postmanrenderer
 setup:
 	$(MAKE) setup-hooks
 	$(MAKE) $(VENV)/bin/activate
@@ -22,10 +22,10 @@ dist: $(VENV)/bin/activate
 
 test: 
 	$(MAKE) activate
-	export PYTHONPATH=./postmanrenderer && $(PYTHON) -m $(PYTEST) --cov-report term --cov=postmanrenderer
+	$(EXPORT_PYPATH) && $(PYTHON) -m $(PYTEST) --cov-report term --cov=postmanrenderer
 	
 coverage:
-	$(PYTHON) -m pytest --cov-report term --cov=postmanrenderer
+	$(EXPORT_PYPATH) && $(PYTHON) -m pytest --cov-report term --cov=postmanrenderer
 
 twine-check: dist
 	$(PYTHON-M) twine check dist/*
