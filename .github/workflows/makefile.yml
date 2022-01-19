@@ -3,16 +3,15 @@ name: Makefile CI
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
-  test-build-publish:
-    name: Build and publish Python distribution
+  test:
+    name: Run Tests
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@main
+
     - name: Set up Python 3.8
       uses: actions/setup-python@v2
       with:
@@ -23,11 +22,33 @@ jobs:
       
     - name: test
       run: make tests
-      
+
+
+  publish:    
+    name: Build dist and publish
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@main
+
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+
+    - name: venv
+      run: make setup
+
     - name: dist
       run: |
         make dist
         make twine-check
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: dist
+        path: dist/*
         
     - name: publish
       run: |
@@ -35,3 +56,4 @@ jobs:
         export TWINE_USERNAME=__token__
         make publish
     
+# TODO: TAG RELEASE with v
