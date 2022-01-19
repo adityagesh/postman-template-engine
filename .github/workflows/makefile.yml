@@ -24,7 +24,7 @@ jobs:
       run: make setup
       
     - name: test
-      run: make tests
+      run: make test
 
 
   publish: 
