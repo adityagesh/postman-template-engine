@@ -29,4 +29,57 @@ The objectives of project are as follows:
 1. Create a template engine for postman which can be used to define collections and requests.
 2. The template engine will generate postman collection in JSON format, which can be imported by Postman GUI application or run using Newman client
 
+## Example
+
+```python
+
+   collection = Collection("sample_collection")
+   request = Request("Yahoo request", HTTP_METHOD.GET,"", [], Url("https://www.yahoo.com"))
+   collection.add_request(request)
+   
+   request = Request("Google request", HTTP_METHOD.GET,"", [], Url("https://www.google.com"))
+   collection.add_request(request)
+   
+   template = collection.get_template_object()
+   render = collection.render(template)
+```
+#### Output:
+
+```json
+
+{
+    "info": {
+        "_postman_id": "63c64688-0373-4f34-b0e0-7708cbe41c3b",
+        "name": "sample_collection",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [{
+            "name": "Yahoo request",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "www.yahoo.com", 
+                    "protocol": "https",
+                    "host": ["www", "yahoo", "com"]
+                },
+                "description": ""
+            },
+            "response": []
+        }, {
+            "name": "Google request",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "www.google.com", 
+                    "protocol": "https",
+                    "host": ["www", "google", "com"]
+                },
+                "description": ""
+            },
+            "response": []
+        }]
+}
+```
 
