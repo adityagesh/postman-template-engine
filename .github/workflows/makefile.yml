@@ -33,7 +33,9 @@ jobs:
       with:
         release_branch: main
         release_strategy: none
-        GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+      env:
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+        
   
   publish: 
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
