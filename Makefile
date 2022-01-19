@@ -14,12 +14,9 @@ setup-hooks:
 activate:  
 	$(VENV)/bin/activate
 
-build: 
+dist: 
 	$(MAKE) activate
 	python setup.py sdist bdist_wheel
-
-dist: 
-	$(MAKE) build
 
 test: 
 	$(MAKE) activate
@@ -40,6 +37,8 @@ twine-upload: dist
 	$(MAKE) twine-check
 	twine upload dist/*
 
+publish:
+	$(MAKE) twine-test-upload
 
 $(VENV)/bin/activate: requirements.txt
 	python3 -m venv $(VENV)
@@ -48,4 +47,4 @@ $(VENV)/bin/activate: requirements.txt
 clean:
 	rm -r __pycache__  $(VENV) dist/
 
-.PHONY: activate clean build test setup setup-hooks coverage twine-check twine-test-upload twine-upload
+.PHONY: activate clean test setup setup-hooks coverage twine-check twine-test-upload twine-upload publish
