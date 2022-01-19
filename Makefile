@@ -1,5 +1,6 @@
 VENV := venv
 PYTHON := $(VENV)/bin/python3
+PYTHON-M := $(PYTHON) -m
 PIP := $(VENV)/bin/pip
 PYTEST := pytest
 
@@ -28,15 +29,15 @@ coverage:
 	$(PYTHON) -m pytest --cov-report term --cov=postmanrenderer
 
 twine-check: dist
-	twine check dist/*
+	$(PYTHON-M) twine check dist/*
 
 twine-test-upload: dist
 	$(MAKE) twine-check
-	twine upload  --verbose --repository-url https://test.pypi.org/legacy/ dist/* 
+	$(PYTHON-M) twine upload  --verbose --repository-url https://test.pypi.org/legacy/ dist/* 
 
 twine-upload: dist
 	$(MAKE) twine-check
-	twine upload dist/*
+	$(PYTHON-M) twine upload dist/*
 
 publish:
 	$(MAKE) twine-test-upload
