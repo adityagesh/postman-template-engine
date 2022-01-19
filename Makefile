@@ -22,8 +22,7 @@ dist: $(VENV)/bin/activate
 
 test: 
 	$(MAKE) activate
-	$(shell export PYTHONPATH=./postmanrenderer)
-	$(PYTHON) -m $(PYTEST) --cov-report term --cov=postmanrenderer
+	export PYTHONPATH=./postmanrenderer && $(PYTHON) -m $(PYTEST) --cov-report term --cov=postmanrenderer
 	
 coverage:
 	$(PYTHON) -m pytest --cov-report term --cov=postmanrenderer
