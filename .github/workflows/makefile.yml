@@ -23,6 +23,8 @@ jobs:
       run: make test
 
   semver:
+    name: Semver
+    runs-on: ubuntu-latest
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     needs: test
     steps:
