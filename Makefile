@@ -16,7 +16,10 @@ activate:
 
 build: 
 	$(MAKE) activate
-	python setup.py bdist_wheel
+	python setup.py sdist bdist_wheel
+
+dist: 
+	$(MAKE) build
 
 test: 
 	$(MAKE) activate
@@ -26,12 +29,23 @@ test:
 coverage:
 	$(PYTHON) -m pytest --cov-report term --cov=postmanrenderer
 
+twine-check: dist
+	twine check dist/*
+
+twine-test-upload: dist
+	$(MAKE) twine-check
+	twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+
+twine-upload: dist
+	$(MAKE) twine-check
+	twine upload dist/*
+
+
 $(VENV)/bin/activate: requirements.txt
 	python3 -m venv $(VENV)
 	$(PIP) install -r requirements.txt
 
 clean:
-	rm -rf __pycache__
-	rm -rf $(VENV)
+	rm -r __pycache__  $(VENV) dist/
 
-.PHONY: activate clean build test setup setup-hooks coverage
+.PHONY: activate clean build test setup setup-hooks coverage twine-check twine-test-upload twine-upload

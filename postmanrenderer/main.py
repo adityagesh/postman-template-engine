@@ -4,11 +4,12 @@ from jinja2 import Template, FileSystemLoader, Environment
 from typing import List
 import jinja_env 
 
+# Representation of Header of a Request 
 class Header:
     def __init__(self):
         pass
 
-
+# Representation of Request Url
 class Url: 
     def __init__(self, url: str):
         url_split = url.split("://")
@@ -16,6 +17,7 @@ class Url:
         self.raw = url_split[-1]
         self.host = self.raw.split(".")
 
+# Representation of Request in a Collection
 class Request:
     def __init__(self, name: str, method: HTTP_METHOD, description: str, headers: List[Header], url: Url) -> None:
         self.name = name
@@ -24,7 +26,7 @@ class Request:
         self.headers = headers
         self.url = url
 
-
+# Representation of Postman Collection
 class Collection:
     def __init__(self, name, id = None) -> None:
         self.id = uuid.uuid4() if id == None else id

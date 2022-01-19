@@ -1,3 +1,9 @@
+## Usage
+1. Setup: `make setup`
+2. Unit Tests: `make tests`
+3. Build package: `make build`
+
+
 ## Broad Area of Work
 Postman is an application used for API testing. It is an HTTP client that tests HTTP requests, utilizing a graphical user interface, through which we obtain different types of responses that need to be subsequently validated. The current research project focus is on developing a template engine that can produce postman collections in JSON format.
 

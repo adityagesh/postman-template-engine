@@ -5,7 +5,7 @@
         "schema": "{{collection.schema}}"
     },
     "item": [
-        {% for request in collection.requests %}
+        {%- for request in collection.requests -%}
         {% include "request.j2" -%}
          {{ ", " if not loop.last else "" }}
         {%- endfor -%}
