@@ -41,6 +41,9 @@ twine-upload: dist
 publish:
 	$(MAKE) twine-test-upload
 
+update-requirements:
+	pip freeze --all > requirements.txt
+
 $(VENV)/bin/activate: requirements.txt
 	python3 -m venv $(VENV)
 	$(PIP) install -r requirements.txt

@@ -16,6 +16,7 @@ Jinja2==3.0.3
 keyring==23.5.0
 MarkupSafe==2.0.1
 packaging==21.3
+pip==19.2.3
 pkginfo==1.8.2
 pluggy==1.0.0
 py==1.11.0
@@ -30,6 +31,7 @@ requests==2.27.1
 requests-toolbelt==0.9.1
 rfc3986==2.0.0
 SecretStorage==3.3.1
+setuptools==41.2.0
 six==1.16.0
 toml==0.10.2
 tomli==2.0.0
@@ -38,5 +40,5 @@ twine==3.7.1
 typing-extensions==4.0.1
 urllib3==1.26.8
 webencodings==0.5.1
-zipp==3.7.0
 wheel==0.37.1
+zipp==3.7.0
