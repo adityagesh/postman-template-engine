@@ -32,7 +32,15 @@ jobs:
       uses: cycjimmy/semantic-release-action@v2
       id: semantic
       with:
-        branch: 'main'
+        semantic_version: 16
+        branches: |    
+          [
+          'main', 
+          {
+            name: '(?!main)$', 
+            prerelease: true
+          },
+          ]
         dry_run: true
         extra_plugins: |
           @semantic-release/changelog
