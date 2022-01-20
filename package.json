@@ -1,7 +1,7 @@
 {
   "name": "postmanrenderer",
   "version": "1.0.0",
-  "description": "1. Setup: `make setup`\r 2. Unit Tests: `make tests`\r 3. Build dist: `make dist`",
+  "description": "A template engine, which converts a custom template to Postman collection in JSON format.",
   "main": "index.js",
   "directories": {
     "test": "tests"
@@ -22,6 +22,7 @@
   "dependencies": {
     "@semantic-release/changelog": "^6.0.1",
     "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^8.0.2",
     "semantic-release": "^19.0.2"
   }
 }
