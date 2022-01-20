@@ -30,11 +30,8 @@ jobs:
       uses: actions/checkout@v2
     - name: Extract branch name
       shell: bash
-      run: echo "##[set-output name=branch;]$(echo $(echo ${GITHUB_REF##*/} | cut -c1-10))"
+      run: echo "##[set-output name=branch;]$(echo pre-$(echo ${GITHUB_REF##*/} | cut -c1-10))"
       id: extract_branch
-    - name: echo
-      shell: bash
-      run: echo ${{ steps.extract_branch.outputs.branch }}
     - name: Semantic Release
       uses: cycjimmy/semantic-release-action@v2
       id: semantic
@@ -85,7 +82,8 @@ jobs:
         path: dist/*
     - name: publish
       run: |
-        export TWINE_PASSWORD=${{ secrets.PYPI_TEST_TOKEN }}
+        export TWINE_TEST_PASSWORD=${{ secrets.PYPI_TEST_TOKEN }}
+        export TWINE_PASSWORD=${{ secrets.PYPI_TOKEN }}
         export TWINE_USERNAME=__token__
         make publish
   
