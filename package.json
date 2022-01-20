@@ -1,0 +1,27 @@
+{
+  "name": "postmanrenderer",
+  "version": "1.0.0",
+  "description": "1. Setup: `make setup`\r 2. Unit Tests: `make tests`\r 3. Build dist: `make dist`",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adityagesh/postman-template-engine.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adityagesh/postman-template-engine/issues"
+  },
+  "homepage": "https://github.com/adityagesh/postman-template-engine#readme",
+  "dependencies": {
+    "@semantic-release/changelog": "^6.0.1",
+    "@semantic-release/git": "^10.0.1",
+    "semantic-release": "^19.0.2"
+  }
+}

@@ -4,3 +4,4 @@ dist/
 postmanrenderer.egg-info/
 __pycache__
 .coverage
+node_modules/
