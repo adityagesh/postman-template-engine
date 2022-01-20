@@ -32,6 +32,9 @@ jobs:
       shell: bash
       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/::8})"
       id: extract_branch
+    - name: echo
+      shell: bash
+      run: echo ${{ steps.extract_branch.outputs.branch }}
     - name: Semantic Release
       uses: cycjimmy/semantic-release-action@v2
       id: semantic
