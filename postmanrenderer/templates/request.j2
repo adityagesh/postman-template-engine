@@ -2,7 +2,12 @@
             "name": "{{request.name}}",
             "request": {
                 "method": "{{request.method}}",
-                "header": [],
+                "header": [
+                    {%- for key, value in request.headers.items() -%}
+                    {% include "header.j2" -%}
+                    {{ ", " if not loop.last else "" }}
+                    {%- endfor -%}
+                ],
                 "url": {
                     "raw": "{{request.url.raw}}",
                     {%- if request.url.protocol %} 
