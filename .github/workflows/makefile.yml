@@ -37,7 +37,7 @@ jobs:
           [
           'main', 
           {
-            name: '(?!main)$', 
+            name: '!main', 
             prerelease: true
           },
           ]
