@@ -74,6 +74,3 @@ jobs:
         export TWINE_USERNAME=__token__
         make publish
   
-
-# TODO: TAG RELEASE with v
-# TODO: Run Test for all branches, release for main
