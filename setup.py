@@ -11,7 +11,7 @@ with open(path.join(pwd, 'README.MD'), encoding='utf-8') as f:
 setup(
     name='postmanrenderer',
     packages=find_packages(include=['postmanrenderer']),
-    version=getenv("VERSION", "0.1.0"),
+    version=getenv("RELEASE_VERSION", "0.1.0"),
     description='Create and Export Postman collections',
     long_description=long_description,
     long_description_content_type="text/markdown",

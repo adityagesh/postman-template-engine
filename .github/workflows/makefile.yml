@@ -58,8 +58,9 @@ jobs:
       run: make setup
     - name: dist
       env:
-        GITHUB_TOKEN: ${{needs.semver.outputs.new_release_version}}
+        RELEASE_VERSION: ${{needs.semver.outputs.new_release_version}}
       run: |
+        echo `Release Version: $RELEASE_VERSION`
         make dist
         make twine-check
     - name: Upload artifacts
