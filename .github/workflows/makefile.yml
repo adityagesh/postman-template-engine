@@ -28,6 +28,10 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+    - name: Extract branch name
+      shell: bash
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/::8})"
+      id: extract_branch
     - name: Semantic Release
       uses: cycjimmy/semantic-release-action@v2
       id: semantic
@@ -38,7 +42,7 @@ jobs:
           'main', 
           {
             name: '!main', 
-            prerelease: true
+            prerelease: '${{ steps.extract_branch.outputs.branch }}'
           },
           ]
         dry_run: true
