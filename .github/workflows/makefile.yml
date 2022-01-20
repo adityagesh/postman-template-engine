@@ -33,6 +33,7 @@ jobs:
       id: semantic
       with:
         branch: 'main'
+        dry_run: true
         extra_plugins: |
           @semantic-release/changelog
       env:
@@ -60,7 +61,6 @@ jobs:
       env:
         RELEASE_VERSION: ${{needs.semver.outputs.new_release_version}}
       run: |
-        echo `Release Version: $RELEASE_VERSION`
         make dist
         make twine-check
     - name: Upload artifacts
