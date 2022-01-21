@@ -34,6 +34,16 @@ jobs:
       shell: bash
       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF##*/})"
       id: extract_branch
+    
+    - name: Compute bool for dry_run
+      shell: bash
+      run: |
+        if [[  ${{ steps.extract_branch.outputs.branch }} != main ]]; then
+        echo "##[set-output name=dry_run_bool;]$(echo false)"
+        else
+        echo "##[set-output name=dry_run_bool;]$(echo true)"
+        fi
+      id: compute_dry_run
 
     - name: Semantic Release
       uses: cycjimmy/semantic-release-action@v2
@@ -44,7 +54,7 @@ jobs:
           [
           '${{ steps.extract_branch.outputs.branch }}', 
           ]
-        dry_run: true
+        dry_run: ${{ steps.compute_dry_run.outputs.dry_run_bool }}
         extra_plugins: |
           @semantic-release/changelog@6
       env:
