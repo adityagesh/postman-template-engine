@@ -25,7 +25,7 @@ jobs:
     needs: test
     outputs:
       new_release_version: ${{ steps.semantic.outputs.new_release_version }}
-      custom_release_version: ${{ steps.version.outputs.version }}
+      custom_release_version: ${{ steps.version.outputs.custom_version }}
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -35,18 +35,6 @@ jobs:
       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF##*/})"
       id: extract_branch
 
-    - name: Semantic branch config
-      shell: bash
-      run: |
-        if [[  ${{ steps.extract_branch.outputs.branch }} != main ]]; then 
-        branch_config="{ \
-              name: '${{ steps.extract_branch.outputs.branch }}', \
-              prerelease: 'dev'\
-            },"
-        fi
-        echo "##[set-output name=branch_config;]$(echo ${branch_config})"
-      id: branch_config
-
     - name: Semantic Release
       uses: cycjimmy/semantic-release-action@v2
       id: semantic
@@ -54,22 +42,21 @@ jobs:
         semantic_version: 18
         branches: |    
           [
-          'main', 
-          ${{ steps.branch_config.outputs.branch_config }}
+          '${{ steps.extract_branch.outputs.branch }}', 
           ]
         dry_run: true
         extra_plugins: |
           @semantic-release/changelog@6
       env:
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+  
     - name: Set Semantic Version
-      if: steps.semantic.outputs.new_release_published == 'true'
       shell: bash
       run: |
         if [[  ${{ steps.extract_branch.outputs.branch }} != main ]]; then
-        echo "##[set-output name=version;]$(echo ${{ steps.semantic.outputs.new_release_version}}$(date +%d%m%y%H%M%S%3N))"
+        echo "##[set-output name=custom_version;]$(echo ${{ steps.semantic.outputs.new_release_version}}.dev$(date +%d%m%y%H%M%S%3N))"
         else
-        echo "##[set-output name=version;]$(echo ${{ steps.semantic.outputs.new_release_version }})" 
+        echo "##[set-output name=custom_version;]$(echo ${{ steps.semantic.outputs.new_release_version }})" 
         fi
       id: version        
   
@@ -98,6 +85,8 @@ jobs:
         name: dist
         path: dist/*
     - name: publish
+      env:
+        RELEASE_VERSION: ${{needs.semver.outputs.custom_release_version}}
       run: |
         export TWINE_TEST_PASSWORD=${{ secrets.PYPI_TEST_TOKEN }}
         export TWINE_PASSWORD=${{ secrets.PYPI_TOKEN }}
