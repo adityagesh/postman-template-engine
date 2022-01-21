@@ -42,6 +42,7 @@ jobs:
         echo "##[set-output name=dry_run_bool;]$(echo false)"
         else
         echo "##[set-output name=dry_run_bool;]$(echo true)"
+        fi
       id: compute_dry_run
 
     - name: Semantic Release
