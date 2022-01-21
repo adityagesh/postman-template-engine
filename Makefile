@@ -42,7 +42,7 @@ twine-upload: dist
 	$(PYTHON-M) twine upload --username ${TWINE_USERNAME} --password ${TWINE_PASSWORD} --verbose dist/* 
 
 publish:
-	if [[ "$(RELEASE_VERSION)" == *"pre-"* ]]; then \
+	if [[ "$(RELEASE_VERSION)" == *"dev"* ]]; then \
 	$(MAKE) twine-test-upload; \
 	else \
 	$(MAKE) twine-upload; \
