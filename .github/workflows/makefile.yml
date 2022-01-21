@@ -46,7 +46,6 @@ jobs:
     - name: Echo branch config
       shell: bash
       run: echo "${{ steps.branch_config.outputs.branch_config }}"
-      id: extract_branch
     - name: Semantic Release
       uses: cycjimmy/semantic-release-action@v2
       id: semantic
