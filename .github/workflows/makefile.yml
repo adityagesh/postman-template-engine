@@ -39,9 +39,9 @@ jobs:
       shell: bash
       run: |
         if [[  ${{ steps.extract_branch.outputs.branch }} != main ]]; then
-        echo "##[set-output name=dry_run_bool;]$(echo false)"
-        else
         echo "##[set-output name=dry_run_bool;]$(echo true)"
+        else
+        echo "##[set-output name=dry_run_bool;]$(echo false)"
         fi
       id: compute_dry_run
 
