@@ -1,9 +1,11 @@
+SHELL=/bin/bash
 VENV := venv
 PYTHON := $(VENV)/bin/python3
 PYTHON-M := $(PYTHON) -m
 PIP := $(VENV)/bin/pip
 PYTEST := pytest
 EXPORT_PYPATH = export PYTHONPATH=./postmanrenderer
+
 setup:
 	$(MAKE) setup-hooks
 	$(MAKE) $(VENV)/bin/activate
@@ -32,14 +34,19 @@ twine-check: dist
 
 twine-test-upload: dist
 	$(MAKE) twine-check
-	$(PYTHON-M) twine upload  --verbose --repository-url https://test.pypi.org/legacy/ dist/* 
+	$(PYTHON-M) twine upload --username ${TWINE_USERNAME} --password ${TWINE_TEST_PASSWORD} --verbose --repository-url https://test.pypi.org/legacy/ dist/* 
+
 
 twine-upload: dist
 	$(MAKE) twine-check
-	$(PYTHON-M) twine upload dist/*
+	$(PYTHON-M) twine upload --username ${TWINE_USERNAME} --password ${TWINE_PASSWORD} --verbose dist/* 
 
 publish:
-	$(MAKE) twine-test-upload
+	if [[ "$(RELEASE_VERSION)" == *"dev"* ]]; then \
+	$(MAKE) twine-test-upload; \
+	else \
+	$(MAKE) twine-upload; \
+	fi
 
 update-requirements:
 	pip freeze --all > requirements.txt

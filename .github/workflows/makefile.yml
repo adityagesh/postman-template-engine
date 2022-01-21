@@ -21,31 +21,47 @@ jobs:
   semver:
     name: Semver
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    if: ${{ github.event_name == 'push' }}
     needs: test
     outputs:
       new_release_version: ${{ steps.semantic.outputs.new_release_version }}
+      custom_release_version: ${{ steps.version.outputs.custom_version }}
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+
+    - name: Extract branch name
+      shell: bash
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF##*/})"
+      id: extract_branch
+
     - name: Semantic Release
       uses: cycjimmy/semantic-release-action@v2
       id: semantic
       with:
-        branch: 'main'
+        semantic_version: 18
+        branches: |    
+          [
+          '${{ steps.extract_branch.outputs.branch }}', 
+          ]
         dry_run: true
         extra_plugins: |
-          @semantic-release/changelog
+          @semantic-release/changelog@6
       env:
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
-    - name: Semantic Version
-      if: steps.semantic.outputs.new_release_published == 'true'
+  
+    - name: Set Semantic Version
+      shell: bash
       run: |
-        echo ${{ steps.semantic.outputs.new_release_version }}
-        
+        if [[  ${{ steps.extract_branch.outputs.branch }} != main ]]; then
+        echo "##[set-output name=custom_version;]$(echo ${{ steps.semantic.outputs.new_release_version}}.dev$(date +%d%m%y%H%M%S%3N))"
+        else
+        echo "##[set-output name=custom_version;]$(echo ${{ steps.semantic.outputs.new_release_version }})" 
+        fi
+      id: version        
   
   publish: 
-    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    if: ${{ github.event_name == 'push' }}
     needs: [test, semver]
     name: dist and publish
     runs-on: ubuntu-latest
@@ -59,7 +75,7 @@ jobs:
       run: make setup
     - name: dist
       env:
-        RELEASE_VERSION: ${{needs.semver.outputs.new_release_version}}
+        RELEASE_VERSION: ${{needs.semver.outputs.custom_release_version}}
       run: |
         make dist
         make twine-check
@@ -69,8 +85,11 @@ jobs:
         name: dist
         path: dist/*
     - name: publish
+      env:
+        RELEASE_VERSION: ${{needs.semver.outputs.custom_release_version}}
       run: |
-        export TWINE_PASSWORD=${{ secrets.PYPI_TEST_TOKEN }}
+        export TWINE_TEST_PASSWORD=${{ secrets.PYPI_TEST_TOKEN }}
+        export TWINE_PASSWORD=${{ secrets.PYPI_TOKEN }}
         export TWINE_USERNAME=__token__
         make publish
   
