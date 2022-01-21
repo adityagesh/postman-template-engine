@@ -25,6 +25,7 @@ jobs:
     needs: test
     outputs:
       new_release_version: ${{ steps.semantic.outputs.new_release_version }}
+      custom_release_version: ${{ steps.version.outputs.version }}
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -40,7 +41,7 @@ jobs:
         if [[  ${{ steps.extract_branch.outputs.branch }} != main ]]; then 
         branch_config="{ \
               name: '${{ steps.extract_branch.outputs.branch }}', \
-              prerelease: 'dev$(date +%d%m%y%H%M%S%3N)'\
+              prerelease: 'dev'\
             },"
         fi
         echo "##[set-output name=branch_config;]$(echo ${branch_config})"
@@ -61,11 +62,16 @@ jobs:
           @semantic-release/changelog@6
       env:
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
-    - name: Semantic Version
+    - name: Set Semantic Version
       if: steps.semantic.outputs.new_release_published == 'true'
+      shell: bash
       run: |
-        echo ${{ steps.semantic.outputs.new_release_version }}
-        
+        if [[  ${{ steps.extract_branch.outputs.branch }} != main ]]; then
+        echo "##[set-output name=version;]$(echo ${{ steps.semantic.outputs.new_release_version$(date +%d%m%y%H%M%S%3N) }})"
+        else
+        echo "##[set-output name=version;]$(echo ${{ steps.semantic.outputs.new_release_version }})" 
+        fi
+      id: version        
   
   publish: 
     if: ${{ github.event_name == 'push' }}
@@ -82,7 +88,7 @@ jobs:
       run: make setup
     - name: dist
       env:
-        RELEASE_VERSION: ${{needs.semver.outputs.new_release_version}}
+        RELEASE_VERSION: ${{needs.semver.outputs.custom_release_version}}
       run: |
         make dist
         make twine-check
