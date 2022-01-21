@@ -40,7 +40,7 @@ jobs:
         if [[  ${{ steps.extract_branch.outputs.branch }} != main ]]; then 
         branch_config="{ \
               name: '${{ steps.extract_branch.outputs.branch }}', \
-              prerelease: 'dev$(echo date +%d%m%y%H%M%S%3N)'\
+              prerelease: 'dev$(date +%d%m%y%H%M%S%3N)'\
             },"
         fi
         echo "##[set-output name=branch_config;]$(echo ${branch_config})"
