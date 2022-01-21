@@ -67,7 +67,7 @@ jobs:
       shell: bash
       run: |
         if [[  ${{ steps.extract_branch.outputs.branch }} != main ]]; then
-        echo "##[set-output name=version;]$(echo ${{ steps.semantic.outputs.new_release_version$(date +%d%m%y%H%M%S%3N) }})"
+        echo "##[set-output name=version;]$(echo ${{ steps.semantic.outputs.new_release_version}}$(date +%d%m%y%H%M%S%3N))"
         else
         echo "##[set-output name=version;]$(echo ${{ steps.semantic.outputs.new_release_version }})" 
         fi
