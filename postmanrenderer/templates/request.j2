@@ -8,6 +8,7 @@
                     {{ ", " if not loop.last else "" }}
                     {%- endfor -%}
                 ],
+                {%- if request.body %}"body": {% include "body.j2" -%} {%- endif %},
                 "url": {
                     "raw": "{{request.url.raw}}",
                     {%- if request.url.protocol %} 

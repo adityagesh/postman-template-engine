@@ -1,4 +1,5 @@
-from constants import APP, HTTP_METHOD, POSTMAN
+from abc import ABC, abstractmethod
+from constants import APP, HTTP_METHOD, POSTMAN, BODY_MODE, Language
 import uuid
 from jinja2 import Template, FileSystemLoader, Environment
 from typing import List
@@ -22,17 +23,53 @@ class Url:
         self.host = self.raw.split(".")
 
 
+class RequestBodyData(ABC):
+    @abstractmethod
+    def to_json(self):
+        pass
+
+
+class KeyValueData(RequestBodyData):
+    def __init__(self, key: str, value: str, description: str = ""):
+        self.key = key
+        self.value = value
+        self.description = description
+        self.type = "text"
+
+    def to_json(self):
+        return ""
+
+
+class RawData(RequestBodyData):
+    def __init__(self, data: str, language: Language = Language.text):
+        self.data = data
+        self.language = language
+    
+    def to_json(self):
+        return ""
+
+
+class RequestBody:
+    def __init__(self, mode: BODY_MODE, data: RequestBodyData):
+        self.mode = mode
+        self.data = data
+
+
 # Representation of Request in a Collection
 class Request:
-    def __init__(self, name: str, method: HTTP_METHOD, description: str, url: Url) -> None:
+    def __init__(self, name: str, method: HTTP_METHOD, description: str, url: Url, body: RequestBody = None) -> None:
         self.name = name
         self.method = method
         self.description = description
         self.headers = dict()
         self.url = url
+        self.body = None
 
     def add_header(self, key: str, value: str):
         self.headers[key] = value
+
+    def add_body(self, body: RequestBody):
+        self.body = body
 
 
 # Representation of Postman Collection
