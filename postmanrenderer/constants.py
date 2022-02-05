@@ -22,8 +22,10 @@ class HTTP_METHOD:
 
 
 class BODY_MODE:
-    FORMDATA = "formdata"
-    FORM_URLENCODED = "urlencoded"
+    formdata = "formdata"
+    urlencoded = "urlencoded"
+    file = "file"
+    raw = "raw"
 
 
 class Jinja:
@@ -35,4 +37,4 @@ class Language:
     html = "html"
     javascript = "javascript"
     json = "json"
-    text = None
+    text = "text"
