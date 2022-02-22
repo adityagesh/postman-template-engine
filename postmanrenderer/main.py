@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import json
 from re import T
 from constants import APP, HTTP_METHOD, POSTMAN, BODY_MODE, Language
 import uuid
@@ -41,9 +42,6 @@ class KeyValueData():
         self.description = description
         self.type = "text"
 
-    def to_json(self):
-        return ""
-
 
 class KeyValueBody(RequestBodyData):
     def __init__(self, data: List[KeyValueData] = []):
@@ -51,6 +49,9 @@ class KeyValueBody(RequestBodyData):
 
     def addKeyValue(self, data: List[KeyValueData]):
         self.data += data
+
+    def to_json(self):
+        return json.dumps(self.data, default=vars)
 
 
 class RawBody(RequestBodyData):
@@ -164,9 +165,14 @@ if __name__ == "__main__":
                       "", Url("https://www.google.com"))
     request.add_header("Content-Type", "Application/json")
 
-    body = RequestBody(BODY_MODE.raw)
-    rawBodyData = RawBody("x = hello test")
-    body.addRawBody(rawBodyData)
+    # body = RequestBody(BODY_MODE.raw)
+    # rawBodyData = RawBody("x = hello test")
+    # body.addRawBody(rawBodyData)
+
+    body = RequestBody(BODY_MODE.formdata)
+    formDataBody = KeyValueBody(
+        [KeyValueData("hello", "world"), KeyValueData("test", "one")])
+    body.addFormData(formDataBody)
     request.add_body(body)
     collection.add_request(request)
 
