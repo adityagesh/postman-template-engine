@@ -8,15 +8,6 @@ from typing import List
 import jinja_env
 
 
-class Header:
-    '''
-    Representation of Header of a Request
-    '''
-
-    def __init__(self):
-        pass
-
-
 class Url:
     '''
     Representation of Request Url
@@ -24,9 +15,9 @@ class Url:
 
     def __init__(self, url: str):
         url_split = url.split("://")
-        self.protocol = url_split[0] if len(url_split) > 1 else None
-        self.raw = url_split[-1]
-        self.host = self.raw.split(".")
+        self.protocol: str = url_split[0] if len(url_split) > 1 else None
+        self.raw: str = url_split[-1]
+        self.host: str = self.raw.split(".")
 
 
 class RequestBodyData(ABC):
@@ -37,15 +28,15 @@ class RequestBodyData(ABC):
 
 class KeyValueData():
     def __init__(self, key: str, value: str, description: str = ""):
-        self.key = key
-        self.value = value
-        self.description = description
+        self.key: str = key
+        self.value: str = value
+        self.description: str = description
         self.type = "text"
 
 
 class KeyValueBody(RequestBodyData):
     def __init__(self, data: List[KeyValueData] = []):
-        self.data = data
+        self.data: List[KeyValueData] = data
 
     def addKeyValue(self, data: List[KeyValueData]):
         self.data += data
@@ -56,8 +47,8 @@ class KeyValueBody(RequestBodyData):
 
 class RawBody(RequestBodyData):
     def __init__(self, data: str, language: Language = Language.text):
-        self.data = data
-        self.language = language
+        self.data: str = data
+        self.language: Language = language
 
     def to_json(self):
         return self.data
@@ -80,8 +71,8 @@ class RequestBody:
     '''
 
     def __init__(self, mode: BODY_MODE):
-        self.mode = mode
-        self.require_options = False
+        self.mode: BODY_MODE = mode
+        self.require_options: bool = False
 
     def addRawBody(self, content: RawBody):
         if self.mode != BODY_MODE.raw:
@@ -110,13 +101,13 @@ class Request:
     Representation of Request in a Collection
     '''
 
-    def __init__(self, name: str, method: HTTP_METHOD, description: str, url: Url, body: RequestBody = None) -> None:
-        self.name = name
-        self.method = method
+    def __init__(self, name: str, method: HTTP_METHOD, description: str, url: Url) -> None:
+        self.name: str = name
+        self.method: HTTP_METHOD = method
         self.description = description
-        self.headers = dict()
-        self.url = url
-        self.body = None
+        self.headers: dict = dict()
+        self.url: Url = url
+        self.body: RequestBody = None
         self.ProtocolProfileBehaviour = None
 
     def add_header(self, key: str, value: str):
@@ -134,11 +125,11 @@ class Collection:
     Representation of Postman Collection
     '''
 
-    def __init__(self, name, id=None) -> None:
+    def __init__(self, name: str, id=None) -> None:
         self.id = uuid.uuid4() if id == None else id
-        self.name = name
+        self.name: str = name
         self.schema = POSTMAN.schema
-        self.requests = []
+        self.requests: List[Request] = []
 
     def add_request(self, request: Request):
         self.requests.append(request)
