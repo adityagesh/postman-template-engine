@@ -21,6 +21,13 @@ class HTTP_METHOD:
     # UNLINK = "UNLINK"
 
 
+class BODY_MODE:
+    formdata = "formdata"
+    urlencoded = "urlencoded"
+    file = "file"
+    raw = "raw"
+
+
 class Jinja:
     trim_blocks = False
     lstrip_blocks = False
@@ -29,3 +36,10 @@ class Jinja:
 class Script_Type:
     prerequest = "prerequest"
     test = "test"
+
+
+class Language:
+    html = "html"
+    javascript = "javascript"
+    json = "json"
+    text = "text"
