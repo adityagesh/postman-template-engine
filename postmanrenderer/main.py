@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import json
 from re import T
-from constants import APP, HTTP_METHOD, POSTMAN, BODY_MODE, Language
+from constants import APP, HTTP_METHOD, POSTMAN, BODY_MODE, Language, Script_Type
 import uuid
 from jinja2 import Template, FileSystemLoader, Environment
 from typing import List
@@ -96,6 +96,17 @@ class RequestBody:
         pass
 
 
+class Script:
+    def __init__(self, script_type: Script_Type, filename):
+        self.script_type = script_type
+        self.script = []
+        with open(filename, "r") as f:
+            self.script = f.readlines()
+        self.script = [s.strip() for s in self.script]
+
+
+# Representation of Request in a Collection
+
 class Request:
     '''
     Representation of Request in a Collection
@@ -109,6 +120,10 @@ class Request:
         self.url: Url = url
         self.body: RequestBody = None
         self.ProtocolProfileBehaviour = None
+        self.events = {}
+
+    def add_script(self, script: Script):
+        self.events[script.script_type] = script
 
     def add_header(self, key: str, value: str):
         self.headers[key] = value
@@ -145,6 +160,10 @@ class Collection:
         rendered_template = template.render(collection=self)
         return rendered_template
 
+    def write_to_file(self, rendered_collection, filename):
+        with open(filename, "w") as f:
+            f.write(rendered_collection)
+
 
 if __name__ == "__main__":
     collection = Collection("sample_collection")
@@ -155,6 +174,10 @@ if __name__ == "__main__":
     request = Request("Google request", HTTP_METHOD.GET,
                       "", Url("https://www.google.com"))
     request.add_header("Content-Type", "Application/json")
+    pre_script = Script(Script_Type.prerequest, "tests/data/pre-request.js")
+    request.add_script(pre_script)
+    request.add_script(Script(Script_Type.test,
+                       "tests/data/post-request.js"))
 
     # body = RequestBody(BODY_MODE.raw)
     # rawBodyData = RawBody("x = hello test")
@@ -169,4 +192,5 @@ if __name__ == "__main__":
 
     template = collection.get_template_object()
     render = collection.render(template)
+    collection.write_to_file(render, "out.collection")
     print(render)

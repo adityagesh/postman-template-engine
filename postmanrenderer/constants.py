@@ -33,6 +33,11 @@ class Jinja:
     lstrip_blocks = False
 
 
+class Script_Type:
+    prerequest = "prerequest"
+    test = "test"
+
+
 class Language:
     html = "html"
     javascript = "javascript"
