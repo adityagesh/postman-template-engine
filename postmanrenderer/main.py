@@ -1,4 +1,5 @@
-from constants import APP, HTTP_METHOD, POSTMAN
+import json
+from constants import APP, HTTP_METHOD, POSTMAN, Script_Type
 import uuid
 from jinja2 import Template, FileSystemLoader, Environment
 from typing import List
@@ -22,7 +23,17 @@ class Url:
         self.host = self.raw.split(".")
 
 
+class Script:
+    def __init__(self, script_type: Script_Type, filename):
+        self.script_type = script_type
+        self.script = []
+        with open(filename, "r") as f:
+            self.script = f.readlines()
+        self.script = [s.strip() for s in self.script]
+
+
 # Representation of Request in a Collection
+
 class Request:
     def __init__(self, name: str, method: HTTP_METHOD, description: str, url: Url) -> None:
         self.name = name
@@ -30,6 +41,10 @@ class Request:
         self.description = description
         self.headers = dict()
         self.url = url
+        self.events = {}
+
+    def add_script(self, script: Script):
+        self.events[script.script_type] = script
 
     def add_header(self, key: str, value: str):
         self.headers[key] = value
@@ -57,6 +72,10 @@ class Collection:
         rendered_template = template.render(collection=self)
         return rendered_template
 
+    def write_to_file(self, rendered_collection, filename):
+        with open(filename, "w") as f:
+            f.write(rendered_collection)
+
 
 if __name__ == "__main__":
     collection = Collection("sample_collection")
@@ -67,9 +86,13 @@ if __name__ == "__main__":
     request = Request("Google request", HTTP_METHOD.GET,
                       "", Url("https://www.google.com"))
     request.add_header("Content-Type", "Application/json")
-
+    pre_script = Script(Script_Type.prerequest, "tests/data/pre-request.js")
+    request.add_script(pre_script)
+    request.add_script(Script(Script_Type.test,
+                       "tests/data/post-request.js"))
     collection.add_request(request)
 
     template = collection.get_template_object()
     render = collection.render(template)
+    collection.write_to_file(render, "out.collection")
     print(render)
