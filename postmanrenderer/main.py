@@ -1,11 +1,12 @@
 from abc import ABC, abstractmethod
 import json
 from re import T
-from constants import APP, HTTP_METHOD, POSTMAN, BODY_MODE, Language, Script_Type
+from .constants import APP, HTTP_METHOD, POSTMAN, BODY_MODE, Language, Script_Type
 import uuid
 from jinja2 import Template, FileSystemLoader, Environment
 from typing import List
-import jinja_env
+from . import jinja_env
+from os import path
 
 
 class Url:
@@ -150,7 +151,7 @@ class Collection:
         self.requests.append(request)
 
     def get_template_object(self) -> Template:
-        file_loader = FileSystemLoader(APP.root_dir + APP.template_dir)
+        file_loader = FileSystemLoader(path.join(path.dirname(__file__),APP.template_dir))
         env = Environment(loader=file_loader)
         jinja_env.init(env)
         template = env.get_template(APP.collections_template)
