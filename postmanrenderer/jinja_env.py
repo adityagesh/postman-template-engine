@@ -1,5 +1,5 @@
 import json
-from constants import Jinja
+from .constants import Jinja
 import jinja2
 
 # Initializes custom filters
