@@ -82,4 +82,3 @@ The objectives of project are as follows:
         }]
 }
 ```
-
