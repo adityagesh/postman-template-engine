@@ -10,7 +10,7 @@ with open(path.join(pwd, 'README.MD'), encoding='utf-8') as f:
 
 setup(
     name='postmanrenderer',
-    packages=find_packages(include=['postmanrenderer']),
+    packages=['postmanrenderer'],
     version=getenv("RELEASE_VERSION", "0.1.0"),
     description='Create and Export Postman collections',
     long_description=long_description,
@@ -22,4 +22,6 @@ setup(
     setup_requires=['pytest-runner'],
     tests_require=['pytest==6.2.5'],
     test_suite='tests',
+    package_data={'postmanrenderer.templates': ['*']},
+    include_package_data=True,
 )
