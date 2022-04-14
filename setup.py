@@ -22,6 +22,6 @@ setup(
     setup_requires=['pytest-runner'],
     tests_require=['pytest==6.2.5'],
     test_suite='tests',
-    package_data={'postmanrenderer.templates': ['*']},
+    package_data={'postmanrenderer': ['templates/*']},
     include_package_data=True,
 )
